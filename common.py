@@ -1,4 +1,6 @@
 #!/bin/python
+# Copyright (c) 2017 Mark Nelson
+
 import argparse
 import pickle
 from gdbtypes import GDBFunction, GDBThread

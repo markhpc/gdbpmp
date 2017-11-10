@@ -1,4 +1,5 @@
 #!/bin/python
+# Copyright (c) 2017 Mark Nelson
 
 class GDBThread:
     def __init__(self, name, num, ptid, function):
