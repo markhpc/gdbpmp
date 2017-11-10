@@ -81,7 +81,9 @@ class ProfileCommand(gdb.Command):
                             self.threads[thn] = GDBThread(th.name, thn, th.ptid, f)
                         if ctx.match and not any(m in th.name for m in ctx.match.split(',')):
                              pass
-                        else:                             
+                        elif ctx.exclude and any(m in th.name for m in ctx.exclude.split(',')):  
+                             pass
+                        else:                           
                             th.switch()
                             frame = gdb.newest_frame()
                             while (frame.older() != None):
