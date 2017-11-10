@@ -20,7 +20,7 @@ Some features are still being implemented.  KeyboardInterrupt handling still
 a bit wonky.  Not many options for changing the callgraph view yet.
 
 ### Help
-
+```
 usage: gdbpmp.py [-h] (-i INPUT | -p PID) [-s SLEEP] [-n SAMPLES] [-m MATCH]
                  [-x EXCLUDE] [-o OUTPUT] [-g GDB_PATH]
 
@@ -43,7 +43,7 @@ optional arguments:
                         Write collected samples to this file.
   -g GDB_PATH, --gdb_path GDB_PATH
                         Path to the GDB executable.
-
+```
 ### Example
 ```
 [perf@incerta08 gdbpmp]$ sudo ./gdbpmp.py -p 18965 -n 100 -m bstore_kv_sync,bstore_kv_final -o gdbpmp.data
