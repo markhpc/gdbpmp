@@ -46,13 +46,14 @@ optional arguments:
 ```
 ### Example
 ```
-[perf@incerta08 gdbpmp]$ sudo ./gdbpmp.py -p 18965 -n 100 -m bstore_kv_sync,bstore_kv_final -o gdbpmp.data
+$ ./gdbpmp.py -p 18965 -n 100 -m bstore_kv_sync,bstore_kv_final -o gdbpmp.data
 Attaching to process 18965...Done.
-Gathering Samples....................................................................................................
+Gathering Samples.............................................................
+.......................................
 Profiling complete with 100 samples.
 ```
 ```
-[perf@incerta08 gdbpmp]$ sudo ./gdbpmp.py -i gdbpmp.data
+$ ./gdbpmp.py -i gdbpmp.data
 
 
 Thread: 1 (ceph-osd) - 0 samples 
