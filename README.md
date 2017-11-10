@@ -8,7 +8,6 @@ Nazečić-Andrlon's gdbprof.
 gdbpmp expands on gdbprof in a number of ways:  
 
  * gdbpmp can be run from the command-line or from inside GDB.
- * It can gather samples from multiple threads.
  * Sample data can be saved and viewed at a later time.
  * Samples are gathered independently for every thread.
  * Filters can be used to limit which threads samples are gathered from.
