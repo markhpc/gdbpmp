@@ -3,7 +3,13 @@
 
 import sys
 import os
-import common
+
+try:
+    import common
+except ImportError:
+    sys.path.append(os.path.dirname(__file__))
+    import common
+
 import gdbtypes
 import subprocess
 import signal
