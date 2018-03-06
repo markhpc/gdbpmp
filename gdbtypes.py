@@ -53,7 +53,7 @@ class GDBFunction:
             function.print_samples(depth+1)
 
     def print_percent(self, prefix, total):
-#        print "%s%0.2f - %s" % (' ' * (self.indent * depth), self.get_percent(total), self.name)
+#        print("%s%0.2f - %s" % (' ' * (self.indent * depth), self.get_percent(total), self.name))
         subfunctions = {}
         for function in self.subfunctions:
             v = function.get_percent(total)

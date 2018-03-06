@@ -23,11 +23,11 @@ def parse_args(args=None):
         return parser.parse_args()
 
 def print_callgraph(threads):
-    print "";
+    print("");
     for thn, gdbth in sorted(threads.iteritems()):
-       print ""
-       print "Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, gdbth.function.get_samples())
-       print ""
+       print("")
+       print("Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, gdbth.function.get_samples()))
+       print("")
        gdbth.function.print_percent("", gdbth.function.get_samples())
 
 def dump_threads(threads, filename):
