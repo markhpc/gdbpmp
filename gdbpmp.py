@@ -19,7 +19,7 @@ def main():
     ctx = common.parse_args()
     if ctx.input:
         threads = common.load_threads(ctx.input)
-        common.print_callgraph(threads)
+        common.print_callgraph(threads, ctx.threshold)
     elif ctx.pid:
         this_path = os.path.realpath(__file__)
         pargs = ' '.join(sys.argv[1:])

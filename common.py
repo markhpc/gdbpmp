@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 # Copyright (c) 2017 Mark Nelson
 
 import argparse
@@ -17,18 +17,19 @@ def parse_args(args=None):
     parser.add_argument('-x', '--exclude', required=False, type=str, help='A comma separated list of strings to match when excluding threads.')
     parser.add_argument('-o', '--output', required=False, type=str, help='Write collected samples to this file.')
     parser.add_argument('-g', '--gdb_path', required=False, type=str, default='/usr/bin/gdb', help='Path to the GDB executable.')
+    parser.add_argument('-t', '--threshold', required=False, type=float, default=0.1, help='Ignore results below the threshold when making the callgraph.')
     if args:
         return parser.parse_args(args)
     else:
         return parser.parse_args()
 
-def print_callgraph(threads):
-    print "";
-    for thn, gdbth in sorted(threads.iteritems()):
-       print ""
-       print "Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, gdbth.function.get_samples())
-       print ""
-       gdbth.function.print_percent("", gdbth.function.get_samples())
+def print_callgraph(threads, threshold):
+    print("");
+    for thn, gdbth in sorted(threads.items()):
+       print("")
+       print("Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, gdbth.function.get_samples()))
+       print("")
+       gdbth.function.print_percent("", gdbth.function.get_samples(), threshold)
 
 def dump_threads(threads, filename):
     with open(filename, 'wb') as handle:

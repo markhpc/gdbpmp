@@ -21,7 +21,7 @@ a bit wonky.  Not many options for changing the callgraph view yet.
 ### Help
 ```
 usage: gdbpmp.py [-h] (-i INPUT | -p PID) [-s SLEEP] [-n SAMPLES] [-m MATCH]
-                 [-x EXCLUDE] [-o OUTPUT] [-g GDB_PATH]
+                 [-x EXCLUDE] [-o OUTPUT] [-g GDB_PATH] [-t THRESHOLD]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -42,6 +42,9 @@ optional arguments:
                         Write collected samples to this file.
   -g GDB_PATH, --gdb_path GDB_PATH
                         Path to the GDB executable.
+  -t THRESHOLD, --threshold THRESHOLD
+                        Ignore results below the threshold when making the
+                        callgraph.
 ```
 ### Example
 ```
