@@ -52,7 +52,7 @@ class GDBFunction:
         for function in self.subfunctions:
             function.print_samples(depth+1)
 
-    def print_percent(self, prefix, total):
+    def print_percent(self, prefix, total, threshold):
 #        print "%s%0.2f - %s" % (' ' * (self.indent * depth), self.get_percent(total), self.name)
         subfunctions = {}
         for function in self.subfunctions:
@@ -68,6 +68,7 @@ class GDBFunction:
         i = 0
         #for name, value in sorted(subfunctions.iteritems(), key=lambda (k,v): (v,k), reverse=True):
         for name, value in sorted(subfunctions.items(), key= lambda kv: (kv[1], kv[0]), reverse=True):
+
             new_prefix = ''
             if i + 1 == len(self.subfunctions):
                new_prefix += '  '
@@ -76,11 +77,11 @@ class GDBFunction:
 
             print ("%s%s%0.2f%% %s" % (prefix, "+ ", value, name))
 
-            # Don't descend for very small values
-            if value < 0.1:
+            # Do not descend below the threshold 
+            if value < threshold:
                 continue;
 
-            self.get_func(name).print_percent(prefix + new_prefix, total)
+            self.get_func(name).print_percent(prefix + new_prefix, total, threshold)
             i += 1
 
     def add_frame(self, frame):
