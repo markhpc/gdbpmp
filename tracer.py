@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (c) 2012 Mak Nazečić-Andrlon
 # Copyright (c) 2017 Mark Nelson
