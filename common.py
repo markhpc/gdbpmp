@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 # Copyright (c) 2017 Mark Nelson
 
 import argparse
@@ -24,7 +24,7 @@ def parse_args(args=None):
 
 def print_callgraph(threads):
     print("");
-    for thn, gdbth in sorted(threads.iteritems()):
+    for thn, gdbth in sorted(threads.items()):
        print("")
        print("Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, gdbth.function.get_samples()))
        print("")

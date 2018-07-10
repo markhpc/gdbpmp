@@ -1,6 +1,6 @@
-#!/bin/python
+#!/usr/bin/python
+
 # -*- coding: utf-8 -*-
-# Copyright (c) 2012 Mak Nazečić-Andrlon
 # Copyright (c) 2017 Mark Nelson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
