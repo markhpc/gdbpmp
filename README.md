@@ -12,16 +12,18 @@ gdbpmp expands on gdbprof in a number of ways:
  * Samples are gathered independently for every thread.
  * Filters can be used to limit which threads samples are gathered from.
  * CTRL+C can be used to stop sample gathering along with a specified number of samples to collect before exiting.
+ * Callgraph depth can be limited a percentage threshold.
+ * Inverse callgraphs can be printed.
 
 ### Caveats
 
 Some features are still being implemented.  KeyboardInterrupt handling still
-a bit wonky.  Not many options for changing the callgraph view yet.
+a bit wonky. 
 
 ### Help
 ```
 usage: gdbpmp.py [-h] (-i INPUT | -p PID) [-s SLEEP] [-n SAMPLES] [-m MATCH]
-                 [-x EXCLUDE] [-o OUTPUT] [-g GDB_PATH] [-t THRESHOLD]
+                 [-x EXCLUDE] [-o OUTPUT] [-g GDB_PATH] [-t THRESHOLD] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -45,6 +47,7 @@ optional arguments:
   -t THRESHOLD, --threshold THRESHOLD
                         Ignore results below the threshold when making the
                         callgraph.
+  -v, --invert          Print inverted callgraph.
 ```
 ### Example
 ```

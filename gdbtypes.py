@@ -21,14 +21,15 @@ class GDBFunction:
     def add_count(self):
         self.count += 1
 
-    def get_samples(self):
+    def get_samples(self, include_sub):
         _count = self.count
-        for function in self.subfunctions:
-            _count += function.get_samples()
+        if include_sub:
+            for function in self.subfunctions:
+                _count += function.get_samples(include_sub)
         return _count
 
-    def get_percent(self, total):
-        return 100.0 * self.get_samples() / total
+    def get_percent(self, total, include_sub):
+        return 100.0 * self.get_samples(include_sub) / total
 
     def get_name(self):
         return self.name;
@@ -47,16 +48,16 @@ class GDBFunction:
         self.subfunctions.append(function)
         return function
 
-    def print_samples(self, depth):
-        print("%s%s - %s" % (' ' * (self.indent * depth), self.get_samples(), self.name))
+    def print_samples(self, depth, include_sub):
+        print("%s%s - %s" % (' ' * (self.indent * depth), self.get_samples(include_sub), self.name))
         for function in self.subfunctions:
             function.print_samples(depth+1)
 
-    def print_percent(self, prefix, total, threshold):
+    def print_percent(self, prefix, total, threshold, include_sub):
 #        print "%s%0.2f - %s" % (' ' * (self.indent * depth), self.get_percent(total), self.name)
         subfunctions = {}
         for function in self.subfunctions:
-            v = function.get_percent(total)
+            v = function.get_percent(total, include_sub)
             if function.name is None:
 #              print(">>>> name = None")
                 function.name = "???"
@@ -81,7 +82,7 @@ class GDBFunction:
             if value < threshold:
                 continue;
 
-            self.get_func(name).print_percent(prefix + new_prefix, total, threshold)
+            self.get_func(name).print_percent(prefix + new_prefix, total, threshold, include_sub)
             i += 1
 
     def add_frame(self, frame):

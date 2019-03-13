@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python2
 # Copyright (c) 2017 Mark Nelson
 
 import sys
@@ -19,7 +19,10 @@ def main():
     ctx = common.parse_args()
     if ctx.input:
         threads = common.load_threads(ctx.input)
-        common.print_callgraph(threads, ctx.threshold)
+        if ctx.invert:
+            common.print_inverted_callgraph(threads, ctx.threshold)
+        else:
+            common.print_callgraph(threads, ctx.threshold)
     elif ctx.pid:
         this_path = os.path.realpath(__file__)
         pargs = ' '.join(sys.argv[1:])
