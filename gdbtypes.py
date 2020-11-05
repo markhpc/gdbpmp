@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 # Copyright (c) 2017 Mark Nelson
 
 class GDBThread:
@@ -49,7 +49,7 @@ class GDBFunction:
         return function
 
     def print_samples(self, depth, include_sub):
-        print("%s%s - %s" % (' ' * (self.indent * depth), self.get_samples(include_sub), self.name))
+        print(("%s%s - %s" % (' ' * (self.indent * depth), self.get_samples(include_sub), self.name)))
         for function in self.subfunctions:
             function.print_samples(depth+1)
 
@@ -68,7 +68,7 @@ class GDBFunction:
 
         i = 0
         #for name, value in sorted(subfunctions.iteritems(), key=lambda (k,v): (v,k), reverse=True):
-        for name, value in sorted(subfunctions.items(), key= lambda kv: (kv[1], kv[0]), reverse=True):
+        for name, value in sorted(list(subfunctions.items()), key= lambda kv: (kv[1], kv[0]), reverse=True):
 
             new_prefix = ''
             if i + 1 == len(self.subfunctions):
@@ -76,7 +76,7 @@ class GDBFunction:
             else:
                new_prefix += '| '
 
-            print ("%s%s%0.2f%% %s" % (prefix, "+ ", value, name))
+            print(("%s%s%0.2f%% %s" % (prefix, "+ ", value, name)))
 
             # Do not descend below the threshold 
             if value < threshold:
