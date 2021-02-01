@@ -1,4 +1,4 @@
-#!/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (c) 2012 Mak Nazečić-Andrlon
 # Copyright (c) 2017 Mark Nelson
@@ -96,7 +96,7 @@ class ProfileCommand(gdb.Command):
         except KeyboardInterrupt:
             pass
         finally:
-            print("\nProfiling complete with %d samples." % samples)
+            print(("\nProfiling complete with %d samples." % samples))
             if ctx.output:
                 common.dump_threads(self.threads, ctx.output)
             else:

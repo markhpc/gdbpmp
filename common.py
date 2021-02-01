@@ -29,7 +29,7 @@ def print_callgraph(threads, threshold):
     for thn, gdbth in sorted(threads.items()):
         samples = gdbth.function.get_samples(True)
         print("")
-        print("Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, samples))
+        print(("Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, samples)))
         print("")
         gdbth.function.print_percent("", samples, threshold, True)
 
@@ -39,7 +39,7 @@ def print_inverted_callgraph(threads, threshold):
         samples = gdbth.function.get_samples(True)
         igdbth = invert_thread(gdbth) 
         print("")
-        print("Thread: %s (%s) - %s samples " % (igdbth.num, igdbth.name, samples))
+        print(("Thread: %s (%s) - %s samples " % (igdbth.num, igdbth.name, samples)))
         print("")
         igdbth.function.print_percent("", samples, threshold, False)
 
