@@ -19,6 +19,8 @@ def parse_args(args=None):
     parser.add_argument('-g', '--gdb_path', required=False, type=str, default='/usr/bin/gdb', help='Path to the GDB executable.')
     parser.add_argument('-t', '--threshold', required=False, type=float, default=0.1, help='Ignore results below the threshold when making the callgraph.')
     parser.add_argument('-v', '--invert', required=False, action='store_true', help='Print inverted callgraph.')
+    parser.add_argument('-d', '--detachattach', required=False, action='store_true', help='Use the detach/attach trace mode.  Slower, but more compatible.')
+
     if args:
         return parser.parse_args(args)
     else:
