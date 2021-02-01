@@ -48,7 +48,7 @@ class ProfileCommand(gdb.Command):
         gdb.execute("set print inferior-events off")
         gdb.execute("set pagination off")
 
-        if ctx.pid and  ctx.pid != gdb.selected_inferior().pid:
+        if ctx.pid and ctx.pid != gdb.selected_inferior().pid:
             detach_and_kill = 1 
             gdb.write("Attaching to process %d..." % ctx.pid)
             gdb.flush(gdb.STDOUT)
@@ -60,6 +60,19 @@ class ProfileCommand(gdb.Command):
             gdb.execute("continue", to_string=True)
             gdb.write("Done.\n")
             gdb.flush(gdb.STDOUT)
+
+        def detach_attach():
+            pid = gdb.selected_inferior().pid
+            os.kill(pid, signal.SIGSTOP)  # Make sure the process does nothing until
+                                          # it's reattached.
+            gdb.execute("detach", to_string=True)
+            os.kill(pid, signal.SIGCONT)
+            sleep(ctx.sleep)
+            os.kill(pid, signal.SIGSTOP)
+            gdb.execute("attach %d" % pid, to_string=True)
+            os.kill(pid, signal.SIGCONT)
+            gdb.execute("continue", to_string=True)
+
         def breaking_continue_handler(event):
             sleep(ctx.sleep)
             os.kill(gdb.selected_inferior().pid, signal.SIGINT)
@@ -69,9 +82,17 @@ class ProfileCommand(gdb.Command):
         gdb.flush(gdb.STDOUT)
         try:
             for i in range(0, ctx.samples):
-                gdb.events.cont.connect(breaking_continue_handler)
-                gdb.execute("continue", to_string=True)
-                gdb.events.cont.disconnect(breaking_continue_handler)
+                # Some processes handle signals in strange ways.  For those
+                # processes we may have to fully detach from the process,
+                # sleep, and then reattach.  This is quite slow.  For other
+                # processes we may be able to tell gdb to continue, sleep,
+                # and then send SIGINT to let GDB stop the process.
+                if ctx.detachattach:
+                    detach_attach()
+                else:
+                    gdb.events.cont.connect(breaking_continue_handler)
+                    gdb.execute("continue", to_string=True)
+                    gdb.events.cont.disconnect(breaking_continue_handler)
                 for inf in gdb.inferiors():
                     inum = inf.num
                     for th in inf.threads():
@@ -81,9 +102,9 @@ class ProfileCommand(gdb.Command):
                             self.threads[thn] = GDBThread(th.name, thn, th.ptid, f)
                         if ctx.match and not any(m in th.name for m in ctx.match.split(',')):
                              pass
-                        elif ctx.exclude and any(m in th.name for m in ctx.exclude.split(',')):  
+                        elif ctx.exclude and any(m in th.name for m in ctx.exclude.split(',')):
                              pass
-                        else:                           
+                        else:
                             th.switch()
                             frame = gdb.newest_frame()
                             while (frame.older() != None):
