@@ -3,6 +3,7 @@
 
 import argparse
 import pickle
+import shutil
 from gdbtypes import GDBFunction, GDBThread
 
 def parse_args(args=None):
@@ -20,22 +21,24 @@ def parse_args(args=None):
     parser.add_argument('-t', '--threshold', required=False, type=float, default=0.1, help='Ignore results below the threshold when making the callgraph.')
     parser.add_argument('-v', '--invert', required=False, action='store_true', help='Print inverted callgraph.')
     parser.add_argument('-d', '--detachattach', required=False, action='store_true', help='Use the detach/attach trace mode.  Slower, but more compatible.')
+    parser.add_argument('-w', '--max_width', required=False, type=int, default=shutil.get_terminal_size().columns, help='Set the display width (default is terminal width)')
+    parser.add_argument('-r', '--truncate', required=False, action='store_true', help="Truncate lines to the terminal width")
 
     if args:
         return parser.parse_args(args)
     else:
         return parser.parse_args()
 
-def print_callgraph(threads, threshold):
+def print_callgraph(ctx, threads):
     print("");
     for thn, gdbth in sorted(threads.items()):
         samples = gdbth.function.get_samples(True)
         print("")
         print(("Thread: %s (%s) - %s samples " % (gdbth.num, gdbth.name, samples)))
         print("")
-        gdbth.function.print_percent("", samples, threshold, True)
+        gdbth.function.print_percent(ctx, "", samples, True)
 
-def print_inverted_callgraph(threads, threshold):
+def print_inverted_callgraph(ctx, threads):
     print("")
     for thn, gdbth in sorted(threads.items()):
         samples = gdbth.function.get_samples(True)
@@ -43,7 +46,7 @@ def print_inverted_callgraph(threads, threshold):
         print("")
         print(("Thread: %s (%s) - %s samples " % (igdbth.num, igdbth.name, samples)))
         print("")
-        igdbth.function.print_percent("", samples, threshold, False)
+        igdbth.function.print_percent(ctx, "", samples, False)
 
 def invert_thread(gdbth):
     inverted_func = GDBFunction(None, 2)

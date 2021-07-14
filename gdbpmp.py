@@ -20,9 +20,9 @@ def main():
     if ctx.input:
         threads = common.load_threads(ctx.input)
         if ctx.invert:
-            common.print_inverted_callgraph(threads, ctx.threshold)
+            common.print_inverted_callgraph(ctx, threads)
         else:
-            common.print_callgraph(threads, ctx.threshold)
+            common.print_callgraph(ctx, threads)
     elif ctx.pid:
         this_path = os.path.realpath(__file__)
         pargs = ' '.join(sys.argv[1:])
@@ -45,4 +45,5 @@ if __name__ == "__main__":
     except ImportError:
         main()
         sys.exit(0)
+    sys.setrecursionlimit(5000)
     tracer.ProfileCommand()

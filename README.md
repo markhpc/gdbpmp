@@ -24,6 +24,7 @@ a bit wonky.
 ```
 usage: gdbpmp.py [-h] (-i INPUT | -p PID) [-s SLEEP] [-n SAMPLES] [-m MATCH]
                  [-x EXCLUDE] [-o OUTPUT] [-g GDB_PATH] [-t THRESHOLD] [-v]
+                 [-d] [-w MAX_WIDTH] [-r]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -48,6 +49,11 @@ optional arguments:
                         Ignore results below the threshold when making the
                         callgraph.
   -v, --invert          Print inverted callgraph.
+  -d, --detachattach    Use the detach/attach trace mode. Slower, but more
+                        compatible.
+  -w MAX_WIDTH, --max_width MAX_WIDTH
+                        Set the display width (default is terminal width)
+  -r, --truncate        Truncate lines to the terminal width
 ```
 ### Example
 ```

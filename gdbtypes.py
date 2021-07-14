@@ -48,42 +48,61 @@ class GDBFunction:
         self.subfunctions.append(function)
         return function
 
-    def print_samples(self, depth, include_sub):
-        print(("%s%s - %s" % (' ' * (self.indent * depth), self.get_samples(include_sub), self.name)))
-        for function in self.subfunctions:
-            function.print_samples(depth+1)
+    def fprint(self, ctx, line):
+        print(line[0:ctx.max_width])
 
-    def print_percent(self, prefix, total, threshold, include_sub):
-#        print "%s%0.2f - %s" % (' ' * (self.indent * depth), self.get_percent(total), self.name)
+    def print_samples(self, ctx, depth, include_sub):
+        self.fprint(("%s%s - %s" % (' ' * (self.indent * depth), self.get_samples(include_sub), self.name)))
+        for function in self.subfunctions:
+            function.print_samples(ctx, depth+1)
+
+    def print_percent(self, ctx, prefix, total, include_sub):
         subfunctions = {}
         for function in self.subfunctions:
             v = function.get_percent(total, include_sub)
             if function.name is None:
-#              print(">>>> name = None")
                 function.name = "???"
             if v is None:
-#              print(">>>>%s" % (function.name))
                 v = "???"
             subfunctions[function.name] = v
 
-        i = 0
-        #for name, value in sorted(subfunctions.iteritems(), key=lambda (k,v): (v,k), reverse=True):
+        depth = 0
         for name, value in sorted(list(subfunctions.items()), key= lambda kv: (kv[1], kv[0]), reverse=True):
+            line_prefix = "%s%s%0.2f%% " % (prefix, "+ ", value)
+            nl_prefix = "%s%s" % (prefix," " * (len(line_prefix)-len(prefix)))
+            line = name
+            if (ctx.max_width > 0 and ctx.max_width < len(line_prefix) + len(line)):
+                # output line will be longer than the max width
+                line_max = ctx.max_width - len(line_prefix);
+                if (ctx.truncate):
+                    # truncate it
+                    self.fprint(ctx, line_prefix + line[0:line_max-3] + "...")
+                else:
+                    # or writap it
+                    self.fprint(ctx, line_prefix + line[0:line_max])
+                    line = line[line_max:]
 
-            new_prefix = ''
-            if i + 1 == len(self.subfunctions):
-               new_prefix += '  '
+                    while (line_max > 0 and len(line) > line_max):
+                        self.fprint(ctx, nl_prefix + line[0:line_max])
+                        line = line[line_max:]
+                    if (len(line) > 0):
+                        self.fprint(ctx, nl_prefix + line)
             else:
-               new_prefix += '| '
-
-            print(("%s%s%0.2f%% %s" % (prefix, "+ ", value, name)))
+                # output line is shorter than the max width, so print it
+                self.fprint(ctx, "%s%s" % (line_prefix, line))
 
             # Do not descend below the threshold 
-            if value < threshold:
+            if value < ctx.threshold:
                 continue;
 
-            self.get_func(name).print_percent(prefix + new_prefix, total, threshold, include_sub)
-            i += 1
+            new_prefix = ''
+            if depth + 1 == len(self.subfunctions):
+               new_prefix += ' '
+            else:
+               new_prefix += '|'
+
+            self.get_func(name).print_percent(ctx, prefix + new_prefix, total, include_sub)
+            depth += 1
 
     def add_frame(self, frame):
         if frame is None:
